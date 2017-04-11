@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">brysonApp</string>
+    <string name="title">Bryson\'s First App</string>
+    <string name="title1">About Me:</string>
+    <string name="body1">My name is Bryson Good, \nI\'m 21 years old and have live in Seattle, Wa all my life. I\'ve played trombone for 13 years, and was in the UW Husky Marching
+        Band for 3 years. I have a 2 year old Australian Cattle Dog named Ahsoka.</string>
+    <string name="title2">Work:</string>
+    <string name="body2">I work at Ben Bridge Jeweler, as their Website Operations and manage all
+        content updates on the website.</string>
+    <string name="title3">Interests:</string>
+    <string name="body3">Hiking\nMusic\nPlaying with my dog</string>
+</resources>
