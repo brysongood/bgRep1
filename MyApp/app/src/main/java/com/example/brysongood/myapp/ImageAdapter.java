@@ -50,7 +50,7 @@ public class ImageAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.trails, R.drawable.placeholder,
+            R.drawable.trails, R.drawable.about,
             R.drawable.placeholder, R.drawable.placeholder,
     };
 

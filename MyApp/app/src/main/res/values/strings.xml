@@ -4,4 +4,25 @@
     <string name="button_send">Submit</string>
     <string name="textview">Welcome to the Name Entry App.\nHit the back button to
         enter another name.</string>
+    <string name="title_activity_display_about">DisplayAbout</string>
+    <string name="action_about">About</string>
+    <string name="action_home">Home</string>
+    <string name="action_hike">Hike List</string>
+
+
+    <!-- About page -->
+    <string name="about_header">About</string>
+    <string name="about_title1">Welcome to My Hiking Journal,</string>
+    <string name="about_text">This application is meant to be a digital gallery of Washington State
+        Hikes, while also allowing a user to keep a journal of their adventures. While the
+        application is in its early development, here are the overall goals of the
+        application.</string>
+    <string name="about_title2">Goals:</string>
+    <string name="about_goals">1. Have a database of Washington state hikes for user to view.
+        \n2. Allow users to add a hike to their journal.
+        \n3. Allow users to use camera to document a hike.
+        \n4. Use gps to track distance and record exact route.</string>
+    <string name="hike_tip_title">Hiking 101</string>
+    <string name="tip_message_1">Wear well-fitting and broken-in hiking boots to avoid discomfort and injury.</string>
+
 </resources>
