@@ -2,9 +2,14 @@ package com.example.brysongood.myapp;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -33,11 +38,23 @@ public class MainActivity extends AppCompatActivity {
     // Set Constants
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
+    private static final String NETWORK_TAG = "NetworkStatusExample";
+
+    // Whether there is a Wi-Fi connection.
+    private static boolean wifiConnected = false;
+    // Whether there is a mobile connection.
+    private static boolean mobileConnected = false;
+    // Whether the display should be refreshed.
+    public static boolean refreshDisplay = true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
@@ -47,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
                                     int position, long id) {
                 switch (position) {
                     case 0:
+                        Log.d(TAG, "Display Trail List Clicked");
+
+                        if(!isOnline()) {
+                            noConnectionBuilder();
+                            break;
+                        }
+
+
                         Intent trailList = new Intent(MainActivity.this, DisplayTrailList.class);
                         startActivity(trailList);
 
@@ -54,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
+                        Log.d(TAG, "Display About Clicked");
                         Intent about = new Intent(MainActivity.this, DisplayAbout.class);
                         startActivity(about);
 
@@ -61,10 +87,15 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
+                        Log.d(TAG, "Display case 2 Clicked");
+                        /* Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(settings);
+                        */
                         Toast.makeText(MainActivity.this, "" + position,
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
+                        Log.d(TAG, "Display case 3 Clicked");
                         Toast.makeText(MainActivity.this, "" + position,
                                 Toast.LENGTH_SHORT).show();
                         break;
@@ -85,7 +116,39 @@ public class MainActivity extends AppCompatActivity {
                 rateDialogBuilder();
             };
         });
+
     }
+
+    private boolean isOnline() {
+        updateConnectedFlags();
+
+        if ((wifiConnected == true) || (mobileConnected == true)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void noConnectionBuilder() {
+        Log.d(TAG, "noConnectionBuilder started");
+        // Use the Builder class for convenient dialog construction
+
+        final AlertDialog.Builder noConnection = new AlertDialog.Builder(MainActivity.this);
+        noConnection.setTitle(R.string.network_connection)
+                .setMessage(R.string.connection_not_found)
+                .setPositiveButton("Dismiss", new OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d(TAG, "Dialog Dismissed");
+                        dialog.dismiss();
+                    }
+                });
+        // Create the AlertDialog object and return it
+        AlertDialog alertDialog = noConnection.create();
+        alertDialog.show();
+    }
+
+
+
     public void rateDialogBuilder() {
         Log.d(TAG, "rateDialogBuilder started");
         // Use the Builder class for convenient dialog construction
@@ -119,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
                 Log.d(TAG, "action_about selected");
@@ -157,10 +220,32 @@ public class MainActivity extends AppCompatActivity {
      startActivity(intent);
      }
      */
+
+    // Checks the network connection and sets the wifiConnected and mobileConnected
+    // variables accordingly.
+    public void updateConnectedFlags() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+        if (activeInfo != null && activeInfo.isConnected()) {
+            wifiConnected = activeInfo.getType() == ConnectivityManager.TYPE_WIFI;
+            mobileConnected = activeInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+        } else {
+            Log.d(TAG, "wifi / mobile not connected");
+            wifiConnected = false;
+            mobileConnected = false;
+        }
+    }
+
+
     @Override
     public void onStart() {
         Log.d(TAG, "onStart() started");
         super.onStart();
+
+        updateConnectedFlags();
+
     }
 
     @Override

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/TBD"
+        android:key="pref_key_network_settings"></PreferenceCategory>
+    <!--android:defaultValue="@string/pref_syncConnectionTypes_default" -->
+
+
+</PreferenceScreen>

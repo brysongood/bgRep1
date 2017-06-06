@@ -24,5 +24,19 @@
         \n4. Use gps to track distance and record exact route.</string>
     <string name="hike_tip_title">Hiking 101</string>
     <string name="tip_message_1">Wear well-fitting and broken-in hiking boots to avoid discomfort and injury.</string>
+    <string name="wifi_connected">Wifi Connected</string>
+    <string name="lost_connection">Connection Lost</string>
+
+    <!-- PREFRENCES -->
+    <string name="TBD">Coming Soon...</string>
+    <!-- Network Prefrences -->
+    <string name="pref_network_title">Network</string>
+    <string name="pref_wifi_only">WIFI Only</string>
+    <string name="pref_wifi_only_summ">Use wifi only when using network connections</string>
+    <string name="pref_all_networks">Phone network and WIFI</string>
+    <string name="pref_all_networks_summ">Use phone network with WIFI is not available.</string>
+    <string name="lblSettings">Settings</string>
+    <string name="network_connection">Network Connection</string>
+    <string name="connection_not_found">No connection found, please enable WIFI or Mobile network.</string>
 
 </resources>
