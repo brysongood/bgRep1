@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_Network">
+        <item>Wifi Only</item>
+        <item>Any Network</item>
+    </string-array>
+</resources>
