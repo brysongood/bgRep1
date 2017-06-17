@@ -38,5 +38,14 @@
     <string name="lblSettings">Settings</string>
     <string name="network_connection">Network Connection</string>
     <string name="connection_not_found">No connection found, please enable WIFI or Mobile network.</string>
+    <string name="title_activity_my_location">Map</string>
+    <string name="mapLat">Latitude</string>
+    <string name="mapLon">Longitude</string>
+    <string name="mapLocation">Location</string>
+    <string name="address_found">Address Found</string>
+    <string name="no_location_data">No Location Data</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Latitude or Longitude Used</string>
+    <string name="no_address_found">Address Not Found</string>
 
 </resources>

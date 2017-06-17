@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 
 /**
  * Created by brysongood on 4/20/17.
@@ -37,7 +36,7 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
+            imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -51,7 +50,7 @@ public class ImageAdapter extends BaseAdapter {
     // references to our images
     private Integer[] mThumbIds = {
             R.drawable.trails, R.drawable.about,
-            R.drawable.placeholder, R.drawable.placeholder,
+            R.drawable.map_location, R.drawable.placeholder,
     };
 
 }
