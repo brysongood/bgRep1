@@ -1,34 +1,30 @@
 package com.example.brysongood.myapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.*;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -75,6 +71,9 @@ public class DisplayTrailList extends AppCompatActivity {
     };*/
 
 
+    private static final String DEBUG_TAG = "NetworkStatusExample";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() started");
@@ -97,46 +96,52 @@ public class DisplayTrailList extends AppCompatActivity {
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
 
+        // Check to see if the device is connected
+        if(!isOnline()) {
+            // If no conntection, display message to user that routes them to home screen.
+            noConnectionBuilder();
 
+        } else { // continue loading activity
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview1);
-        mRecyclerView.setHasFixedSize(true);
+            mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview1);
+            mRecyclerView.setHasFixedSize(true);
 
-        // set a linear layout manager
-        mRecyclerViewLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
+            // set a linear layout manager
+            mRecyclerViewLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
 
-        mRecyclerViewAdapter = new DisplayTrailList.TrailListAdapter();
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+            mRecyclerViewAdapter = new DisplayTrailList.TrailListAdapter();
+            mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-        // AsyncTask json request
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonReq = new JsonArrayRequest( URL, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for(int i = 0; i < response.length(); i++){
-                        String[] trail = new String[3];
-                        trail[0] = response.getJSONObject(i).getString("hikeName");
-                        trail[1] = response.getJSONObject(i).getString("hikeLocation");
-                        trail[2] = response.getJSONObject(i).getString("hikeDistance");
-                        trailList.add(trail);
+            // AsyncTask json request
+            RequestQueue queue = Volley.newRequestQueue(this);
+            JsonArrayRequest jsonReq = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            String[] trail = new String[3];
+                            trail[0] = response.getJSONObject(i).getString("hikeName");
+                            trail[1] = response.getJSONObject(i).getString("hikeLocation");
+                            trail[2] = response.getJSONObject(i).getString("hikeDistance");
+                            trailList.add(trail);
+                        }
+                        // trigger refresh of recycler view
+                        mRecyclerViewAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+
                     }
-                    // trigger refresh of recycler view
-                    mRecyclerViewAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("JSON", "Error: " + error.getMessage());
-            }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("JSON", "Error: " + error.getMessage());
+                }
 
-        });
-        // Add the request to the RequestQueue.
-        queue.add(jsonReq);
+            });
+            // Add the request to the RequestQueue.
+            queue.add(jsonReq);
+        }
     }
 
     public class TrailListAdapter extends RecyclerView.Adapter<TrailListAdapter.ViewHolder>{
@@ -223,6 +228,52 @@ public class DisplayTrailList extends AppCompatActivity {
 
         }
     }
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            Log.d(TAG, "Connected to network");
+
+            /* Code to check connectivity type */
+            boolean isWifiConn = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+            boolean isMobileConn = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+
+            Log.d(TAG, "Wifi connected: " + isWifiConn);
+            Log.d(TAG, "Mobile connected: " + isMobileConn);
+
+            return true;
+
+        } else {
+            Log.d(TAG, "wifi / mobile not connected");
+            return false;
+        }
+    }
+
+    public void noConnectionBuilder() {
+        Log.d(TAG, "noConnectionBuilder started");
+        // Use the Builder class for convenient dialog construction
+
+        final AlertDialog.Builder noConnection = new AlertDialog.Builder(DisplayTrailList.this);
+        noConnection.setTitle(R.string.network_connection)
+                .setMessage(R.string.connection_not_found)
+                .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d(TAG, "Dialog Dismissed");
+                        Intent home = new Intent(DisplayTrailList.this, MainActivity.class);
+                        startActivity(home);
+
+                        dialog.dismiss();
+                    }
+                });
+        // Create the AlertDialog object and return it
+        AlertDialog alertDialog = noConnection.create();
+        alertDialog.show();
+    }
+
     @Override
     public void onStart() {
         Log.d(TAG, "onStart() started");
